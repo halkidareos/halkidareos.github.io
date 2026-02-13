@@ -7,7 +7,7 @@
 <style>
 body{
     margin:0;
-    font-family:'Segoe UI',cursive;
+    font-family: 'Segoe UI', cursive;
     overflow:hidden;
     background:linear-gradient(135deg,#ffd6ec,#ff9ecb);
     text-align:center;
@@ -15,7 +15,7 @@ body{
 }
 
 /* SCREENS */
-#firstScreen,#secondScreen{
+#firstScreen, #secondScreen{
     position:absolute;
     inset:0;
     display:flex;
@@ -23,7 +23,8 @@ body{
     justify-content:center;
     align-items:center;
 }
-#secondScreen{display:none;}
+
+#secondScreen{ display:none; }
 
 /* BUTTON */
 button{
@@ -37,30 +38,33 @@ button{
     box-shadow:0 0 15px rgba(255,0,100,.6);
     transition:.3s;
 }
-button:hover{transform:scale(1.1);}
+button:hover{ transform:scale(1.1); }
 
-/* ROSE */
+/* ROSE PETALS */
 .rose{
     position:relative;
     width:300px;
     height:300px;
 }
+
 .petal{
     position:absolute;
     width:120px;
     height:160px;
     background:radial-gradient(circle at 30% 30%, #ffb6d9, #ff4d88);
-    border-radius:60%;
+    border-radius:60% 60% 60% 60%;
     cursor:pointer;
     transition:.3s;
 }
-.petal:hover{transform:scale(1.1);}
-.petal:nth-child(1){top:0;left:90px;}
-.petal:nth-child(2){top:60px;left:170px;transform:rotate(60deg);}
-.petal:nth-child(3){top:150px;left:150px;transform:rotate(120deg);}
-.petal:nth-child(4){top:150px;left:30px;transform:rotate(180deg);}
-.petal:nth-child(5){top:60px;left:10px;transform:rotate(240deg);}
-.petal:nth-child(6){top:-10px;left:90px;transform:rotate(300deg);}
+
+.petal:hover{ transform:scale(1.1); }
+
+.petal:nth-child(1){ top:0; left:90px; }
+.petal:nth-child(2){ top:60px; left:170px; transform:rotate(60deg);}
+.petal:nth-child(3){ top:150px; left:150px; transform:rotate(120deg);}
+.petal:nth-child(4){ top:150px; left:30px; transform:rotate(180deg);}
+.petal:nth-child(5){ top:60px; left:10px; transform:rotate(240deg);}
+.petal:nth-child(6){ top:-10px; left:90px; transform:rotate(300deg);}
 
 #center{
     position:absolute;
@@ -69,7 +73,7 @@ button:hover{transform:scale(1.1);}
     width:80px;
     height:80px;
     border-radius:50%;
-    background:white;
+    background:#fff;
     color:#ff4d88;
     display:flex;
     justify-content:center;
@@ -97,15 +101,16 @@ button:hover{transform:scale(1.1);}
     z-index:9999;
 }
 
-/* FLOATING LOVE */
+/* FLOATING TEXT */
 .floatingLove{
     position:fixed;
     font-size:20px;
     animation:floatUp 4s linear forwards;
 }
+
 @keyframes floatUp{
-    from{transform:translateY(0);opacity:1;}
-    to{transform:translateY(-200px);opacity:0;}
+    from{transform:translateY(0); opacity:1;}
+    to{transform:translateY(-200px); opacity:0;}
 }
 
 /* FIREWORK */
@@ -116,55 +121,23 @@ button:hover{transform:scale(1.1);}
     border-radius:50%;
 }
 
-/* RAT SCENE */
+/* RAT IMAGE */
 #ratContainer{
     position:fixed;
     inset:0;
     background:#fff0f6;
-    display:none;
+    display:flex;
+    flex-direction:column;
     justify-content:center;
     align-items:center;
-    flex-direction:column;
-    overflow:hidden;
     z-index:99999;
+    display:none;
 }
 
-#ratScene{
-    position:relative;
-    width:100%;
-    height:60vh;
+#ratContainer img{
+    width:300px;
 }
 
-#walkingRat{
-    position:absolute;
-    bottom:0;
-    left:-250px;
-    width:220px;
-}
-
-#kiss{
-    position:absolute;
-    bottom:160px;
-    left:50%;
-    font-size:45px;
-    opacity:0;
-    transform:translateX(-50%) scale(0);
-    transition:all .6s ease;
-}
-.kissPop{
-    opacity:1 !important;
-    transform:translateX(-50%) scale(1.5) !important;
-}
-
-.heartBurst{
-    position:absolute;
-    font-size:24px;
-    animation:burstUp 2s ease forwards;
-}
-@keyframes burstUp{
-    from{transform:translateY(0);opacity:1;}
-    to{transform:translateY(-120px);opacity:0;}
-}
 </style>
 </head>
 
@@ -192,54 +165,57 @@ button:hover{transform:scale(1.1);}
 <div id="popup"></div>
 
 <div id="ratContainer">
-    <div id="ratScene">
-        <img id="walkingRat" src="https://media.tenor.com/UWbLQqLZq6sAAAAM/rat-cute.gif">
-        <div id="kiss">💋</div>
-    </div>
-    <h2 id="ratText">Wait for it... 🐀🌹</h2>
+    <h1>It was me all along 🐀🌹</h1>
+    <img src="https://media.tenor.com/UWbLQqLZq6sAAAAM/rat-cute.gif">
+    <p>I love you more than this rat loves roses.</p>
 </div>
 
 <script>
+
 const music=document.getElementById("bgMusic");
-window.onload=()=>{music.volume=.5;music.play().catch(()=>{});}
+window.onload=()=>{music.volume=0.5;music.play().catch(()=>{});}
 document.addEventListener("click",()=>{if(music.paused)music.play();},{once:true});
 
 function startRose(){
-    firstScreen.style.display="none";
-    secondScreen.style.display="flex";
+    document.getElementById("firstScreen").style.display="none";
+    document.getElementById("secondScreen").style.display="flex";
 }
 
 let clicked=0;
+
 function clickPetal(el,text){
-    if(el.classList.contains("clicked"))return;
+    if(el.classList.contains("clicked")) return;
     el.classList.add("clicked");
     el.style.opacity=".6";
     clicked++;
     showMsg(text);
+
     if(clicked===6){
-        center.classList.add("active");
-        center.innerText="Click Me 💖";
+        document.getElementById("center").classList.add("active");
+        document.getElementById("center").innerText="Click Me 💖";
     }
 }
 
 function showMsg(text){
-    popup.innerHTML=text;
-    popup.style.display="block";
-    setTimeout(()=>popup.style.display="none",2500);
+    const box=document.getElementById("popup");
+    box.innerHTML=text;
+    box.style.display="block";
+    setTimeout(()=>box.style.display="none",2500);
 }
 
 function finalQuestion(){
-    if(!center.classList.contains("active"))return;
-    popup.innerHTML=`
+    if(!document.getElementById("center").classList.contains("active")) return;
+    const box=document.getElementById("popup");
+    box.innerHTML=`
         Will you be my Valentine? 💖<br><br>
         <button onclick="yes()">YES 💘</button>
         <button onclick="runAway(this)">No 🙈</button>
     `;
-    popup.style.display="block";
+    box.style.display="block";
 }
 
 function yes(){
-    popup.innerHTML=`
+    document.getElementById("popup").innerHTML=`
         <h2>She Said YES 😭💍</h2>
         <p>I promise to love you forever.</p>
         <button onclick="showRat()">Click for Next ➜</button>
@@ -257,12 +233,12 @@ function floatingLove(){
         t.innerText="I love you 💖";
         document.body.appendChild(t);
         setTimeout(()=>t.remove(),4000);
-    },700);
+    },500);
 }
 
 function startFireworks(){
     setInterval(()=>{
-        for(let i=0;i<30;i++){
+        for(let i=0;i<40;i++){
             const f=document.createElement("div");
             f.className="firework";
             f.style.left=Math.random()*100+"vw";
@@ -280,32 +256,7 @@ function startFireworks(){
 }
 
 function showRat(){
-    ratContainer.style.display="flex";
-    let position=-250;
-    const walk=setInterval(()=>{
-        position+=2;
-        walkingRat.style.left=position+"px";
-        if(position>=window.innerWidth/2-110){
-            clearInterval(walk);
-            ratText.innerText="He brought you a kiss 💋";
-            setTimeout(()=>{
-                kiss.classList.add("kissPop");
-                heartExplosion();
-            },600);
-        }
-    },16);
-}
-
-function heartExplosion(){
-    for(let i=0;i<20;i++){
-        const heart=document.createElement("div");
-        heart.className="heartBurst";
-        heart.innerText="💖";
-        heart.style.left=(window.innerWidth/2+(Math.random()*100-50))+"px";
-        heart.style.bottom="160px";
-        ratScene.appendChild(heart);
-        setTimeout(()=>heart.remove(),2000);
-    }
+    document.getElementById("ratContainer").style.display="flex";
 }
 
 function runAway(btn){
@@ -313,6 +264,7 @@ function runAway(btn){
     btn.style.top=Math.random()*200+"px";
     btn.style.left=Math.random()*200+"px";
 }
+
 </script>
 
 </body>
