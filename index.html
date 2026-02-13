@@ -11,17 +11,50 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-    background: radial-gradient(circle at top,#f3cdd7,#e9b7c4,#dca6b5);
+    background: linear-gradient(-45deg,#f3cdd7,#e9b7c4,#dca6b5,#f8d7e1);
+    background-size:400% 400%;
+    animation: gradientMove 20s ease infinite;
     font-family: 'Segoe UI', sans-serif;
     overflow:hidden;
 }
 
-/* LOADING SCREEN */
+@keyframes gradientMove{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+/* SOFT WHITE FLASH */
+.flash{
+    position:fixed;
+    inset:0;
+    background:white;
+    opacity:0;
+    pointer-events:none;
+    z-index:9998;
+    transition:opacity 0.6s ease;
+}
+
+/* BREATHING GLOW */
+.glow{
+    position:absolute;
+    width:520px;
+    height:520px;
+    background: radial-gradient(circle,rgba(255,182,217,0.6),transparent 70%);
+    border-radius:50%;
+    animation: breathe 8s ease-in-out infinite;
+    z-index:-1;
+}
+@keyframes breathe{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.1);}
+}
+
+/* LOADING */
 #loadingScreen{
     position:fixed;
-    width:100%;
-    height:100%;
-    background: radial-gradient(circle at top,#f3cdd7,#e9b7c4,#dca6b5);
+    inset:0;
+    background:inherit;
     display:flex;
     flex-direction:column;
     justify-content:center;
@@ -30,43 +63,28 @@ body{
     animation:fadeOutLoading 2s ease forwards;
     animation-delay:2.5s;
 }
-
 #loadingScreen h1{
     font-size:42px;
     color:#d63384;
     margin:0;
 }
-
 #loadingScreen p{
     margin-top:10px;
     font-size:18px;
     color:white;
 }
-
 @keyframes fadeOutLoading{
-    to{
-        opacity:0;
-        visibility:hidden;
-    }
+    to{opacity:0;visibility:hidden;}
 }
 
-/* floating animation */
-@keyframes float {
+@keyframes float{
     0%,100%{transform:translateY(0);}
     50%{transform:translateY(-15px);}
 }
 
-/* FADE EFFECT */
-.fade-out{
-    opacity:0;
-    transition:opacity 1s ease;
-}
-.fade-in{
-    opacity:1;
-    transition:opacity 1s ease;
-}
+.fade-out{opacity:0;transition:1s;}
+.fade-in{opacity:1;transition:1s;}
 
-/* FIRST SCREEN */
 #firstScreen{
     animation: float 6s ease-in-out infinite;
     cursor:pointer;
@@ -77,11 +95,9 @@ body{
     box-shadow:0 20px 50px rgba(0,0,0,0.2);
 }
 
-/* SECOND SCREEN */
-#secondScreen{
-    display:none;
-}
+#secondScreen{display:none;}
 
+/* ROSE */
 .rose{
     position:relative;
     width:400px;
@@ -89,6 +105,7 @@ body{
     animation: float 6s ease-in-out infinite;
 }
 
+/* PETALS */
 .petal{
     position:absolute;
     width:200px;
@@ -106,7 +123,6 @@ body{
     font-weight:600;
     box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
-
 .petal:hover{
     transform: scale(1.05) rotate(var(--r));
     box-shadow:0 0 30px rgba(255,105,180,0.6);
@@ -138,16 +154,10 @@ body{
     opacity:0.6;
     transition:0.3s;
 }
+.center.active{cursor:pointer;opacity:1;}
+.center.active:hover{transform:translate(-50%,-50%) scale(1.08);}
 
-.center.active{
-    cursor:pointer;
-    opacity:1;
-}
-
-.center.active:hover{
-    transform:translate(-50%,-50%) scale(1.08);
-}
-
+/* POPUP */
 #popup{
     position:fixed;
     bottom:50px;
@@ -161,6 +171,66 @@ body{
     text-align:center;
 }
 
+/* HEARTS */
+.heart{
+    position:fixed;
+    bottom:-20px;
+    font-size:16px;
+    opacity:0.7;
+    animation:floatUp 7s linear forwards;
+}
+@keyframes floatUp{
+    to{transform:translateY(-110vh);opacity:0;}
+}
+
+/* SPARKLES */
+.sparkle{
+    position:fixed;
+    width:6px;
+    height:6px;
+    background:white;
+    border-radius:50%;
+    opacity:0;
+    animation: sparkleAnim 3s ease forwards;
+}
+@keyframes sparkleAnim{
+    0%{opacity:0;transform:scale(0);}
+    50%{opacity:1;transform:scale(1);}
+    100%{opacity:0;transform:scale(0);}
+}
+
+/* FLOATING PETALS BACKGROUND */
+.bgPetal{
+    position:fixed;
+    width:20px;
+    height:30px;
+    background:radial-gradient(circle,#ffd6e8,#f4a6c1);
+    border-radius:50%;
+    opacity:0.4;
+    animation:fall 12s linear forwards;
+}
+@keyframes fall{
+    to{transform:translateY(110vh) rotate(360deg);opacity:0;}
+}
+
+/* FIREWORK */
+.firework{
+    position:fixed;
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:white;
+}
+
+/* YES SCREEN ZOOM */
+.zoomIn{
+    animation:zoom 2s ease forwards;
+}
+@keyframes zoom{
+    from{transform:scale(0.8);opacity:0;}
+    to{transform:scale(1);opacity:1;}
+}
+
 button{
     margin:10px;
     padding:10px 20px;
@@ -171,48 +241,28 @@ button{
     cursor:pointer;
     font-size:16px;
 }
-
-/* HEARTS */
-.heart{
-    position:fixed;
-    bottom:-20px;
-    font-size:20px;
-    animation:floatUp 5s linear forwards;
-}
-@keyframes floatUp{
-    to{
-        transform:translateY(-110vh);
-        opacity:0;
-    }
-}
-
-/* Fade in for final screen */
-@keyframes fadeIn{
-    from{opacity:0;}
-    to{opacity:1;}
-}
 </style>
 </head>
 
 <body>
 
-<!-- LOADING SCREEN -->
+<div class="flash" id="flash"></div>
+
 <div id="loadingScreen">
-    <h1>For my beautiful princess Oliwia 💖</h1> <!-- CHANGE HER NAME HERE -->
-    <p>Loading something special...</p>
+    <h1>For my beautiful princess Oliwia 💖</h1>
+    <p>Loading something magical...</p>
 </div>
 
-<!-- FIRST SCREEN -->
 <div id="firstScreen" onclick="startRose()">
     <img src="rose.jpg">
 </div>
 
-<!-- SECOND SCREEN -->
 <div id="secondScreen">
+    <div class="glow"></div>
     <div class="rose">
         <div class="petal p1" onclick="clickPetal(this,'You make me smile every single day 😊')"></div>
         <div class="petal p2" onclick="clickPetal(this,'I really really like you 💕')"></div>
-        <div class="petal p3" onclick="clickPetal(this,'I’m so proud of your hard work, my beautiful baby 🥹💖')"></div>
+        <div class="petal p3" onclick="clickPetal(this,'I’m so proud of you 🥹💖')"></div>
         <div class="petal p4" onclick="clickPetal(this,'Being around you feels special ✨')"></div>
         <div class="petal p5" onclick="clickPetal(this,'I think you are amazing 😌')"></div>
         <div class="petal p6" onclick="clickPetal(this,'But there is one more thing... 🌹')"></div>
@@ -221,7 +271,6 @@ button{
 </div>
 
 <div id="popup"></div>
-
 <audio id="bgMusic" src="music.mp3" loop></audio>
 
 <script>
@@ -418,7 +467,7 @@ function runAway(btn){
 }
 
 </script>
-
 </body>
 </html>
+
 
