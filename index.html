@@ -226,14 +226,35 @@ button{
 
 <script>
 
-/* START */
-function startRose(){
-    const first = document.getElementById("firstScreen");
-    const second = document.getElementById("secondScreen");
-    const music = document.getElementById("bgMusic");
+const music = document.getElementById("bgMusic");
 
+/* FORCE MUSIC TO TRY PLAY ON LOAD */
+window.addEventListener("load", () => {
+    attemptAutoPlay();
+});
+
+/* If autoplay blocked, start on first click anywhere */
+document.addEventListener("click", () => {
+    if (music.paused) {
+        music.play().catch(()=>{});
+    }
+}, { once: true });
+
+function attemptAutoPlay(){
     music.volume = 0.5;
-    music.play().catch(()=>{});
+    music.play().catch(()=>{
+        // Autoplay blocked — will start on first click
+    });
+}
+
+/* START ROSE */
+function startRose(){
+    const first=document.getElementById("firstScreen");
+    const second=document.getElementById("secondScreen");
+
+    if (music.paused) {
+        music.play().catch(()=>{});
+    }
 
     first.classList.add("fade-out");
 
@@ -244,47 +265,66 @@ function startRose(){
     },1000);
 }
 
-/* HEARTS */
+/* BACKGROUND EFFECTS */
+
 setInterval(()=>{
-    const heart = document.createElement("div");
-    heart.classList.add("heart");
+    const heart=document.createElement("div");
+    heart.className="heart";
     heart.innerHTML="💖";
-    heart.style.left = Math.random()*100+"vw";
+    heart.style.left=Math.random()*100+"vw";
     document.body.appendChild(heart);
-    setTimeout(()=>heart.remove(),5000);
-},800);
+    setTimeout(()=>heart.remove(),7000);
+},1200);
+
+setInterval(()=>{
+    const s=document.createElement("div");
+    s.className="sparkle";
+    s.style.left=Math.random()*100+"vw";
+    s.style.top=Math.random()*100+"vh";
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),3000);
+},1500);
+
+setInterval(()=>{
+    const p=document.createElement("div");
+    p.className="bgPetal";
+    p.style.left=Math.random()*100+"vw";
+    p.style.top="-40px";
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),12000);
+},2000);
 
 /* PETALS */
-let clickedCount = 0;
-const totalPetals = 6;
 
-function clickPetal(element, text){
+let clickedCount=0;
+
+function clickPetal(element,text){
     if(element.classList.contains("clicked")) return;
 
     element.classList.add("clicked");
-    element.style.opacity = "0.7";
+    element.style.opacity="0.7";
     clickedCount++;
     showMsg(text);
 
-    if(clickedCount === totalPetals){
-        const center = document.getElementById("center");
+    if(clickedCount===6){
+        const center=document.getElementById("center");
         center.classList.add("active");
-        center.innerText = "Click Me 💖";
+        center.innerText="Click Me 💖";
     }
 }
 
 function showMsg(text){
-    const box = document.getElementById("popup");
-    box.innerHTML = text;
+    const box=document.getElementById("popup");
+    box.innerHTML=text;
     box.style.display="block";
-    setTimeout(()=>{ box.style.display="none"; },3000);
+    setTimeout(()=>box.style.display="none",3000);
 }
 
 function finalQuestion(){
     if(!document.getElementById("center").classList.contains("active")) return;
 
-    const box = document.getElementById("popup");
-    box.innerHTML = `
+    const box=document.getElementById("popup");
+    box.innerHTML=`
         Will you be my Valentine? 🌹💖 <br><br>
         <button onclick="yes()">YES 💘</button>
         <button onclick="runAway(this)">No 🙈</button>
@@ -292,49 +332,82 @@ function finalQuestion(){
     box.style.display="block";
 }
 
+/* YES SCREEN WITHOUT STOPPING MUSIC */
+
 function yes(){
-    document.body.innerHTML = `
-    <div style="
-        height:100vh;
-        display:flex;
-        flex-direction:column;
-        justify-content:center;
-        align-items:center;
-        background: radial-gradient(circle,#ff9ecb,#ff6fa5);
-        color:white;
-        text-align:center;
-        animation: fadeIn 2s ease;
-    ">
-        <h1 style="font-size:50px;">She Said YES 💍😭</h1>
-        <p style="font-size:24px; max-width:600px; margin-top:20px;">
-            I promise to make you smile, support your dreams,
-            and remind you every single day how loved you are.
-            You are my favorite person. Always. 💖
+
+    const overlay = document.createElement("div");
+    overlay.style.position="fixed";
+    overlay.style.inset="0";
+    overlay.style.display="flex";
+    overlay.style.flexDirection="column";
+    overlay.style.justifyContent="center";
+    overlay.style.alignItems="center";
+    overlay.style.background="linear-gradient(-45deg,#ff9ecb,#ff6fa5,#ffb3d9)";
+    overlay.style.backgroundSize="400% 400%";
+    overlay.style.animation="gradientMove 10s ease infinite";
+    overlay.style.color="white";
+    overlay.style.textAlign="center";
+    overlay.style.zIndex="9997";
+    overlay.style.animation += ", zoom 2s ease forwards";
+
+    overlay.innerHTML = `
+        <h1 style="font-size:60px;">She Said YES 💍😭</h1>
+        <p style="font-size:24px;max-width:600px;margin-top:20px;">
+            I promise to protect your heart,
+            support your dreams,
+            and choose you every single day.
+            Always you. Forever. 💖
         </p>
-    </div>
     `;
+
+    document.body.appendChild(overlay);
+
     launchConfetti();
+    launchFireworks();
 }
 
+/* CONFETTI */
+
 function launchConfetti(){
-    for(let i=0;i<150;i++){
-        const confetti = document.createElement("div");
-        confetti.style.position="fixed";
-        confetti.style.width="8px";
-        confetti.style.height="8px";
-        confetti.style.backgroundColor =
-            `hsl(${Math.random()*360},100%,60%)`;
-        confetti.style.top="-10px";
-        confetti.style.left=Math.random()*100+"vw";
-        confetti.style.transition="transform 3s linear, top 3s linear";
-        document.body.appendChild(confetti);
+    for(let i=0;i<200;i++){
+        const c=document.createElement("div");
+        c.style.position="fixed";
+        c.style.width="8px";
+        c.style.height="8px";
+        c.style.backgroundColor=`hsl(${Math.random()*360},100%,60%)`;
+        c.style.top="-10px";
+        c.style.left=Math.random()*100+"vw";
+        c.style.transition="transform 4s linear, top 4s linear";
+        document.body.appendChild(c);
 
         setTimeout(()=>{
-            confetti.style.top="100vh";
-            confetti.style.transform=`rotate(${Math.random()*720}deg)`;
+            c.style.top="100vh";
+            c.style.transform=`rotate(${Math.random()*720}deg)`;
         },10);
 
-        setTimeout(()=>confetti.remove(),3000);
+        setTimeout(()=>c.remove(),4000);
+    }
+}
+
+/* FIREWORKS */
+
+function launchFireworks(){
+    for(let i=0;i<60;i++){
+        const f=document.createElement("div");
+        f.className="firework";
+        f.style.left=Math.random()*100+"vw";
+        f.style.top=Math.random()*80+"vh";
+        f.style.backgroundColor=`hsl(${Math.random()*360},100%,70%)`;
+        document.body.appendChild(f);
+
+        setTimeout(()=>{
+            f.style.transform=`scale(6)`;
+            f.style.opacity="0";
+            f.style.transition="all 1s ease-out";
+        },50);
+
+        setTimeout(()=>f.remove(),1000);
     }
 }
 
@@ -345,5 +418,7 @@ function runAway(btn){
 }
 
 </script>
+
 </body>
 </html>
+
